@@ -48,12 +48,12 @@ Here is a vizualization of the features kept.
 
 There is certainly more information to be gained from the in-between frames, which I will preprocess further while the competition is active and this project develops. Unfortunately there are too many missing coordinates, relevant to those landmarks being off screen. With clever imputation I could bypass that with a mapping of 5-10 total vectors per video. For the moment, and for the purpose of lightweighted-ness, I would like to see how the models fair with this limited signal.  
 
-Otherwise, the x and y positions and vector features fit a neat gaussian distribution.
-![](imgs/xpos.png)
-![](imgs/xmovement.png)
+Otherwise, the x and y positions and vector features fit a neat gaussian distribution.  
+![](imgs/xpos.png)  
+![](imgs/xmovement.png)  
 
 We will be testing our models with 5 targets and 87 targets, eventually getting to the full 250 targets.  
-I notice a slight target imbalance and will use SMOTE (Synthetic Minority Oversampling Technique) to avoid false positives in majority classes and maximize recall for the words we'd expect to see most often in a ASL learning environment.
+I notice a slight target imbalance and will use SMOTE (Synthetic Minority Oversampling Technique) to avoid false positives in majority classes and maximize recall for the words we'd expect to see most often in a ASL learning environment.  
 ![](imgs/target_imbalance.png)
 
 ## Model Iteration 1 - Logistic Regression
