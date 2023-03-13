@@ -43,33 +43,49 @@ Finally, for each frame we consistently have:
 ## Data Gathering and EDA
 Since my intent is to classify each .parquet file as an ASL sign, I will populate a new dataset with each row representative of the data from a file.
 The method for data preprocessing I'll be using for this iteration of the project is: for each landmark, including only the x-y position from the first frame, as well as the vector of change in position to the last frame. Totalling 2172 features per file.  
-Here is a vizualization of the features kept.  
-![](imgs/dad_train.png)  
+Here is a vizualization of the features kept, for a single file signing "dad":  
+<img src="imgs/dad_train.png" alt="Image" width="700" height="500"> 
 
 There is certainly more information to be gained from the in-between frames, which I will preprocess further while the competition is active and this project develops. Unfortunately there are too many missing coordinates, relevant to those landmarks being off screen. With clever imputation I could bypass that with a mapping of 5-10 total vectors per video. For the moment, and for the purpose of lightweighted-ness, I would like to see how the models fair with this limited signal.  
 
-Otherwise, the x and y positions and vector features fit a neat gaussian distribution.  
-![](imgs/xpos.png)  
-![](imgs/xmovement.png)  
+Otherwise, the x and y positions and vector features fit a neat gaussian distribution:  
+<img src="imgs/xpos.png" alt="Image" width="450" height="300"> <img src="imgs/xmovement.png" alt="Image" width="450" height="300"> 
+
 
 We will be testing our models with 5 targets and 87 targets, eventually getting to the full 250 targets.  
 I notice a slight target imbalance and will use SMOTE (Synthetic Minority Oversampling Technique) to avoid false positives in majority classes and maximize recall for the words we'd expect to see most often in a ASL learning environment.  
 ![](imgs/target_imbalance.png)
 
-## Model Iteration 1 - Logistic Regression
+## Baseline Model - Logistic Regression
+Using only 5 total targets, Logistic regression performed quite well, but performance dropped off significantly at 87 targets:  
+left - 5 targets  
+right - 87 targets  
+<img src="imgs/lr_small_confusion.png" alt="Image" width="450" height="400"> <img src="imgs/lr_metrics.png" alt="Image" width="450" height="400"> 
 
 ## Model Iteration 2 - Random Forest Classifier
+After hyperparameter tuning, a random forest classifier had high scores for 87 targets, but failed to ever predict many of the signs:
+<img src="imgs/rf_metrics.png" alt="Image" width="450" height="100">  
+
+<img src="imgs/rf_metics_df.png" alt="Image" width="450" height="350">  
 
 ## Model Iteration 3 - Histogram XGBoost Classifier
+The default XGBoost Classifier using the histogram tree method (tree_method = 'gpu_hist') succeeded in predicting all targets all targets at least once, and performed great overall:  
+<img src="imgs/hxgb_metrics.png" alt="Image" width="450" height="400">   
 
 ## Model Iteration 4 - Histogram XGBoost Classifier + SMOTE
+With hyperparameter tuning and SMOTE during training results improved even more:  
+<img src="imgs/hxgb_smote_metrics.png" alt="Image" width="450" height="100">   
 
-## Conclusions
-
-## Future Improvements
-
+The model also performed well in recall for common words:    
+<img src="imgs/recall_common_words.png" alt="Image" width="150" height="200">  
 
 
+## Conclusions and Future Improvements
+ - Scalable: Our final model maintains performance as we increase number of signs to predict.
+ - Lightweight: Model is intrinsically faster to train and predict compared to other sophisticated models.
+ - Optimized for common words.
+
+As I continue work on this project I would like to explore extracting more information from each video file, and in the case of deployment for production, it would be good to add more signers and ensure the model adapts to new environments the signers find themselves in.
 
 Learn More about MediaPipe's solutions:
 https://google.github.io/mediapipe/solutions/holistic.html
