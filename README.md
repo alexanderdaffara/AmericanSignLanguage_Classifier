@@ -1,3 +1,5 @@
+<img src="imgs/nic-rosenau-85UvN7XT_CA-unsplash.jpg" alt="Image" width="1000" height="500"> 
+
 # ASL Classification for Augmented Reality Interactive Learning
 Author:  
 Alexander Claudino Daffara  
